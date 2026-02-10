@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Session from 'supertokens-auth-react/recipe/session';
-import { Shield, LayoutDashboard, CreditCard, Heart, Calendar, FileText, Users, FolderOpen, Tag, HandHelping, Loader2 } from 'lucide-react';
+import { Shield, LayoutDashboard, CreditCard, Heart, Calendar, FileText, Users, FolderOpen, Tag, HandHelping, FileDown, GraduationCap, Loader2 } from 'lucide-react';
 
 const adminNav = [
   { name: 'Dashboard Admin', href: '/admin', icon: LayoutDashboard },
@@ -16,6 +16,8 @@ const adminNav = [
   { name: 'Benevoles', href: '/admin/benevoles', icon: HandHelping },
   { name: 'Projets', href: '/admin/projects', icon: FolderOpen },
   { name: 'Categories', href: '/admin/categories', icon: Tag },
+  { name: 'Documents', href: '/admin/documents', icon: FileDown },
+  { name: 'Formations', href: '/admin/trainings', icon: GraduationCap },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

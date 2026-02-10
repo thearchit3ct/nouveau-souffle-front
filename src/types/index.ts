@@ -418,3 +418,113 @@ export interface CreateVolunteerData {
   availabilities: Record<string, string[]>;
   motivation?: string;
 }
+
+// ── Document ──
+
+export type DocumentVisibility = 'PUBLIC' | 'MEMBERS' | 'ADMIN';
+export type DocumentCategory = 'GUIDE' | 'REPORT' | 'FORM' | 'MEETING_MINUTES' | 'STATUTES' | 'TRAINING' | 'OTHER';
+
+export interface Document {
+  id: string;
+  uploadedById: string;
+  title: string;
+  description?: string;
+  fileName: string;
+  fileSize: number;
+  mimeType: string;
+  filePath: string;
+  visibility: DocumentVisibility;
+  category: DocumentCategory;
+  tags: string[];
+  downloadCount: number;
+  createdAt: string;
+  updatedAt: string;
+  uploadedBy?: { firstName: string; lastName: string };
+}
+
+export interface CreateDocumentData {
+  title: string;
+  description?: string;
+  visibility?: DocumentVisibility;
+  category?: DocumentCategory;
+  tags?: string[];
+}
+
+// ── Training ──
+
+export type TrainingStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
+export type TrainingModuleType = 'VIDEO' | 'PDF' | 'QUIZ' | 'TEXT';
+export type EnrollmentStatus = 'IN_PROGRESS' | 'COMPLETED' | 'ABANDONED';
+
+export interface Training {
+  id: string;
+  title: string;
+  slug: string;
+  description?: string;
+  imageUrl?: string;
+  status: TrainingStatus;
+  duration?: number;
+  difficulty: string;
+  tags: string[];
+  publishedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+  modules?: TrainingModule[];
+  _count?: { enrollments: number };
+}
+
+export interface TrainingModule {
+  id: string;
+  trainingId: string;
+  title: string;
+  type: TrainingModuleType;
+  content?: string;
+  fileUrl?: string;
+  duration?: number;
+  sortOrder: number;
+  createdAt: string;
+}
+
+export interface TrainingEnrollment {
+  id: string;
+  trainingId: string;
+  userId?: string;
+  volunteerId?: string;
+  status: EnrollmentStatus;
+  progress: number;
+  startedAt: string;
+  completedAt?: string;
+  training?: Training;
+  completions?: TrainingCompletion[];
+}
+
+export interface TrainingCompletion {
+  id: string;
+  enrollmentId: string;
+  moduleId: string;
+  completedAt: string;
+}
+
+export interface CreateTrainingData {
+  title: string;
+  description?: string;
+  imageUrl?: string;
+  duration?: number;
+  difficulty?: string;
+  tags?: string[];
+}
+
+export interface CreateTrainingModuleData {
+  title: string;
+  type?: TrainingModuleType;
+  content?: string;
+  fileUrl?: string;
+  duration?: number;
+  sortOrder?: number;
+}
+
+export interface AnnualReceiptResponse {
+  receiptUrl: string;
+  receiptNumber: string;
+  filename: string;
+}

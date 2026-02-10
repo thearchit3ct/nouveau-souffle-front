@@ -13,6 +13,7 @@ const navLinks = [
   { name: 'Projets', href: '/projets' },
   { name: 'Evenements', href: '/events' },
   { name: 'Benevoles', href: '/benevoles' },
+  { name: 'Formations', href: '/formations' },
   { name: 'Contact', href: '/contact' },
 ];
 
