@@ -4,10 +4,11 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Session from 'supertokens-auth-react/recipe/session';
-import { Shield, LayoutDashboard, CreditCard, Heart, Calendar, FileText, Loader2 } from 'lucide-react';
+import { Shield, LayoutDashboard, CreditCard, Heart, Calendar, FileText, Users, Loader2 } from 'lucide-react';
 
 const adminNav = [
   { name: 'Dashboard Admin', href: '/admin', icon: LayoutDashboard },
+  { name: 'Utilisateurs', href: '/admin/users', icon: Users },
   { name: 'Adhesions', href: '/admin/memberships', icon: CreditCard },
   { name: 'Dons', href: '/admin/donations', icon: Heart },
   { name: 'Evenements', href: '/admin/events', icon: Calendar },

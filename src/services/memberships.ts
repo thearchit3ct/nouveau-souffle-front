@@ -37,22 +37,22 @@ export const membershipsApi = {
     if (params?.limit) searchParams.set('limit', String(params.limit));
     if (params?.status) searchParams.set('status', params.status);
     const qs = searchParams.toString();
-    return apiFetch<PaginatedResponse<Membership>>(`/api/v1/admin/memberships${qs ? `?${qs}` : ''}`);
+    return apiFetch<PaginatedResponse<Membership>>(`/api/v1/memberships${qs ? `?${qs}` : ''}`);
   },
 
   getOne(id: string) {
-    return apiFetch<ApiResponse<Membership>>(`/api/v1/admin/memberships/${id}`);
+    return apiFetch<ApiResponse<Membership>>(`/api/v1/memberships/${id}`);
   },
 
   validate(id: string) {
-    return apiFetch<ApiResponse<Membership>>(`/api/v1/admin/memberships/${id}/validate`, {
-      method: 'POST',
+    return apiFetch<ApiResponse<Membership>>(`/api/v1/memberships/${id}/validate`, {
+      method: 'PATCH',
     });
   },
 
   reject(id: string) {
-    return apiFetch<ApiResponse<Membership>>(`/api/v1/admin/memberships/${id}/reject`, {
-      method: 'POST',
+    return apiFetch<ApiResponse<Membership>>(`/api/v1/memberships/${id}/reject`, {
+      method: 'PATCH',
     });
   },
 };

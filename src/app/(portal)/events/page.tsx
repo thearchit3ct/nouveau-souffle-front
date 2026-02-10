@@ -31,7 +31,7 @@ export default function EventsPage() {
 
   const now = new Date();
   const filtered = events.filter((e) => {
-    const eventDate = new Date(e.date);
+    const eventDate = new Date(e.startDatetime);
     return filter === 'upcoming' ? eventDate >= now : eventDate < now;
   });
 

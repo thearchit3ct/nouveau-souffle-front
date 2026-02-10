@@ -25,7 +25,16 @@ export type MembershipStatus = 'PENDING' | 'ACTIVE' | 'EXPIRED' | 'CANCELED' | '
 export type DonationStatus = 'PENDING' | 'COMPLETED' | 'REJECTED' | 'REFUNDED';
 export type EventStatus = 'DRAFT' | 'PUBLISHED' | 'CANCELED' | 'COMPLETED';
 export type RegistrationStatus = 'REGISTERED' | 'CHECKED_IN' | 'CANCELED';
-export type UserRole = 'MEMBER' | 'ADMIN' | 'SUPER_ADMIN';
+export type UserRole =
+  | 'ANONYMOUS'
+  | 'DONOR'
+  | 'MEMBER'
+  | 'VOLUNTEER'
+  | 'COORDINATOR'
+  | 'ADMIN'
+  | 'SUPER_ADMIN';
+
+export type UserStatus = 'PENDING' | 'ACTIVE' | 'SUSPENDED' | 'INACTIVE' | 'DELETED';
 
 // ── User ──
 
@@ -35,8 +44,18 @@ export interface User {
   firstName: string;
   lastName: string;
   phone?: string;
-  address?: string;
+  civility?: string;
+  birthDate?: string;
+  avatarUrl?: string;
+  emailVerified?: boolean;
+  isActive?: boolean;
+  status?: UserStatus;
   role: UserRole;
+  addressLine1?: string;
+  addressLine2?: string;
+  postalCode?: string;
+  city?: string;
+  country?: string;
   memberNumber?: string;
   createdAt: string;
   updatedAt: string;
@@ -151,14 +170,22 @@ export interface Project {
 export interface Event {
   id: string;
   title: string;
+  slug: string;
   description: string;
-  date: string;
-  endDate?: string;
-  location: string;
-  capacity: number;
-  registrationCount: number;
+  type: string;
   status: EventStatus;
+  visibility: string;
+  startDatetime: string;
+  endDatetime?: string;
+  locationName?: string;
+  locationAddress?: string;
+  capacity: number;
+  registrationsCount: number;
+  price?: number;
+  isFree: boolean;
   imageUrl?: string;
+  program?: string;
+  publishedAt?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -176,11 +203,18 @@ export interface EventRegistration {
 
 export interface CreateEventData {
   title: string;
-  description: string;
-  date: string;
-  endDate?: string;
-  location: string;
-  capacity: number;
+  description?: string;
+  type?: string;
+  visibility?: string;
+  startDatetime: string;
+  endDatetime?: string;
+  locationName?: string;
+  locationAddress?: string;
+  capacity?: number;
+  price?: number;
+  isFree?: boolean;
+  imageUrl?: string;
+  program?: string;
 }
 
 export type UpdateEventData = Partial<CreateEventData> & {
@@ -250,4 +284,26 @@ export interface Notification {
   type: string;
   linkUrl?: string;
   createdAt: string;
+}
+
+// ── Search ──
+
+export interface SearchHit {
+  id: string;
+  title?: string;
+  name?: string;
+  description?: string;
+  excerpt?: string;
+  slug?: string;
+  [key: string]: any;
+}
+
+export interface SearchIndexResult {
+  index: string;
+  hits: SearchHit[];
+  estimatedTotalHits: number;
+}
+
+export interface SearchResponse {
+  results: SearchIndexResult[];
 }

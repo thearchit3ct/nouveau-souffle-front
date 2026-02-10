@@ -34,22 +34,22 @@ export const donationsApi = {
     if (params?.limit) searchParams.set('limit', String(params.limit));
     if (params?.status) searchParams.set('status', params.status);
     const qs = searchParams.toString();
-    return apiFetch<PaginatedResponse<Donation>>(`/api/v1/admin/donations${qs ? `?${qs}` : ''}`);
+    return apiFetch<PaginatedResponse<Donation>>(`/api/v1/donations${qs ? `?${qs}` : ''}`);
   },
 
   getStats() {
-    return apiFetch<ApiResponse<DonationStats>>('/api/v1/admin/donations/stats');
+    return apiFetch<ApiResponse<DonationStats>>('/api/v1/donations/stats');
   },
 
   validate(id: string) {
-    return apiFetch<ApiResponse<Donation>>(`/api/v1/admin/donations/${id}/validate`, {
-      method: 'POST',
+    return apiFetch<ApiResponse<Donation>>(`/api/v1/donations/${id}/validate`, {
+      method: 'PATCH',
     });
   },
 
   reject(id: string) {
-    return apiFetch<ApiResponse<Donation>>(`/api/v1/admin/donations/${id}/reject`, {
-      method: 'POST',
+    return apiFetch<ApiResponse<Donation>>(`/api/v1/donations/${id}/reject`, {
+      method: 'PATCH',
     });
   },
 

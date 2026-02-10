@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, Heart } from 'lucide-react';
+import { SearchBar } from '@/components/ui/SearchBar';
 
 const navLinks = [
   { name: 'Accueil', href: '/' },
@@ -51,8 +52,9 @@ export function PublicHeader() {
           })}
         </nav>
 
-        {/* Auth buttons + CTA (desktop) */}
+        {/* Search + Auth buttons + CTA (desktop) */}
         <div className="hidden items-center gap-3 md:flex">
+          <SearchBar />
           <Link
             href="/faire-un-don"
             className="inline-flex items-center gap-1.5 rounded-lg bg-rose-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:ring-offset-2"
@@ -109,6 +111,9 @@ export function PublicHeader() {
               );
             })}
           </nav>
+          <div className="border-t border-zinc-200 px-4 py-3 dark:border-zinc-800">
+            <SearchBar />
+          </div>
           <div className="border-t border-zinc-200 px-4 py-3 dark:border-zinc-800">
             <div className="flex gap-3">
               <Link

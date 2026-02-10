@@ -36,22 +36,22 @@ export const eventsApi = {
 
   // Admin
   create(data: CreateEventData) {
-    return apiFetch<ApiResponse<Event>>('/api/v1/admin/events', {
+    return apiFetch<ApiResponse<Event>>('/api/v1/events', {
       method: 'POST',
       body: JSON.stringify(data),
     });
   },
 
   update(id: string, data: UpdateEventData) {
-    return apiFetch<ApiResponse<Event>>(`/api/v1/admin/events/${id}`, {
+    return apiFetch<ApiResponse<Event>>(`/api/v1/events/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(data),
     });
   },
 
   cancel(id: string) {
-    return apiFetch<ApiResponse<Event>>(`/api/v1/admin/events/${id}/cancel`, {
-      method: 'POST',
+    return apiFetch<ApiResponse<Event>>(`/api/v1/events/${id}`, {
+      method: 'DELETE',
     });
   },
 
@@ -61,14 +61,14 @@ export const eventsApi = {
     if (params?.limit) searchParams.set('limit', String(params.limit));
     const qs = searchParams.toString();
     return apiFetch<PaginatedResponse<EventRegistration>>(
-      `/api/v1/admin/events/${id}/registrations${qs ? `?${qs}` : ''}`
+      `/api/v1/events/${id}/registrations${qs ? `?${qs}` : ''}`
     );
   },
 
   checkIn(eventId: string, regId: string) {
     return apiFetch<ApiResponse<EventRegistration>>(
-      `/api/v1/admin/events/${eventId}/registrations/${regId}/check-in`,
-      { method: 'POST' }
+      `/api/v1/events/${eventId}/registrations/${regId}/check-in`,
+      { method: 'PATCH' }
     );
   },
 };

@@ -20,8 +20,8 @@ function formatDate(dateStr: string): string {
 }
 
 export function EventCard({ event }: EventCardProps) {
-  const placesLeft = event.capacity - event.registrationCount;
-  const isFull = placesLeft <= 0;
+  const placesLeft = event.capacity - event.registrationsCount;
+  const isFull = event.capacity > 0 && placesLeft <= 0;
 
   return (
     <Link
@@ -41,11 +41,11 @@ export function EventCard({ event }: EventCardProps) {
         <div className="mt-4 space-y-2">
           <div className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
             <Calendar className="h-4 w-4" />
-            {formatDate(event.date)}
+            {formatDate(event.startDatetime)}
           </div>
           <div className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
             <MapPin className="h-4 w-4" />
-            {event.location}
+            {event.locationName || event.locationAddress || 'En ligne'}
           </div>
           <div className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
             <Users className="h-4 w-4" />

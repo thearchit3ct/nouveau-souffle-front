@@ -13,6 +13,8 @@ const statusStyles: Record<string, string> = {
   REGISTERED: 'bg-blue-50 text-blue-700 ring-blue-600/20 dark:bg-blue-950/50 dark:text-blue-400 dark:ring-blue-400/30',
   CHECKED_IN: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20 dark:bg-emerald-950/50 dark:text-emerald-400 dark:ring-emerald-400/30',
   ARCHIVED: 'bg-zinc-100 text-zinc-600 ring-zinc-500/20 dark:bg-zinc-800 dark:text-zinc-400 dark:ring-zinc-400/30',
+  SUSPENDED: 'bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-950/50 dark:text-red-400 dark:ring-red-400/30',
+  INACTIVE: 'bg-zinc-100 text-zinc-600 ring-zinc-500/20 dark:bg-zinc-800 dark:text-zinc-400 dark:ring-zinc-400/30',
 };
 
 const statusLabels: Record<string, string> = {
@@ -28,6 +30,8 @@ const statusLabels: Record<string, string> = {
   REGISTERED: 'Inscrit',
   CHECKED_IN: 'Present',
   ARCHIVED: 'Archive',
+  SUSPENDED: 'Suspendu',
+  INACTIVE: 'Inactif',
 };
 
 interface StatusBadgeProps {

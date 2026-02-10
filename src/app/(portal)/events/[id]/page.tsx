@@ -50,7 +50,7 @@ export default function EventDetailPage() {
       await eventsApi.register(id);
       setRegistered(true);
       if (event) {
-        setEvent({ ...event, registrationCount: event.registrationCount + 1 });
+        setEvent({ ...event, registrationsCount: event.registrationsCount + 1 });
       }
     } catch {
       setError('Erreur lors de l\'inscription.');
@@ -66,7 +66,7 @@ export default function EventDetailPage() {
       await eventsApi.cancelRegistration(id);
       setRegistered(false);
       if (event) {
-        setEvent({ ...event, registrationCount: Math.max(0, event.registrationCount - 1) });
+        setEvent({ ...event, registrationsCount: Math.max(0, event.registrationsCount - 1) });
       }
     } catch {
       setError('Erreur lors de la desinscription.');
@@ -99,7 +99,7 @@ export default function EventDetailPage() {
     );
   }
 
-  const placesLeft = event.capacity - event.registrationCount;
+  const placesLeft = event.capacity - event.registrationsCount;
   const isFull = placesLeft <= 0;
 
   return (
@@ -124,19 +124,19 @@ export default function EventDetailPage() {
           <div className="flex items-center gap-3 text-sm text-zinc-600 dark:text-zinc-400">
             <Calendar className="h-5 w-5 text-zinc-400" />
             <div>
-              <p>{formatDate(event.date)}</p>
-              {event.endDate && (
-                <p className="text-zinc-500">Fin : {formatDate(event.endDate)}</p>
+              <p>{formatDate(event.startDatetime)}</p>
+              {event.endDatetime && (
+                <p className="text-zinc-500">Fin : {formatDate(event.endDatetime)}</p>
               )}
             </div>
           </div>
           <div className="flex items-center gap-3 text-sm text-zinc-600 dark:text-zinc-400">
             <MapPin className="h-5 w-5 text-zinc-400" />
-            {event.location}
+            {event.locationName || event.locationAddress || 'En ligne'}
           </div>
           <div className="flex items-center gap-3 text-sm text-zinc-600 dark:text-zinc-400">
             <Users className="h-5 w-5 text-zinc-400" />
-            {event.registrationCount} / {event.capacity} inscrits
+            {event.registrationsCount} / {event.capacity} inscrits
             {isFull && <span className="text-red-600 dark:text-red-400">(Complet)</span>}
           </div>
         </div>
