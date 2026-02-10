@@ -1,15 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Session from 'supertokens-auth-react/recipe/session';
 import { AuthGuard } from '@/components/auth/AuthGuard';
+import { notificationsApi } from '@/services/notifications';
 import {
   LayoutDashboard,
   User,
   Heart,
   CreditCard,
+  Calendar,
+  Shield,
+  Bell,
   LogOut,
   Menu,
   X,
@@ -20,12 +24,38 @@ const navigation = [
   { name: 'Mon Profil', href: '/profile', icon: User },
   { name: 'Mes Dons', href: '/donations', icon: Heart },
   { name: 'Mon Adhesion', href: '/membership', icon: CreditCard },
+  { name: 'Evenements', href: '/events', icon: Calendar },
 ];
 
 function PortalShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    async function loadMeta() {
+      try {
+        const payload = (await Session.getAccessTokenPayloadSecurely()) as {
+          role?: string;
+        };
+        if (payload?.role === 'ADMIN' || payload?.role === 'SUPER_ADMIN') {
+          setIsAdmin(true);
+        }
+      } catch {
+        // Not admin
+      }
+
+      try {
+        const res = await notificationsApi.getUnreadCount();
+        setUnreadCount(res.data.count);
+      } catch {
+        // No notifications
+      }
+    }
+    loadMeta();
+  }, []);
 
   async function handleLogout() {
     await Session.signOut();
@@ -56,7 +86,10 @@ function PortalShell({ children }: { children: React.ReactNode }) {
 
         <nav className="flex-1 space-y-1 p-4">
           {navigation.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive =
+              item.href === '/dashboard'
+                ? pathname === '/dashboard'
+                : pathname.startsWith(item.href);
             return (
               <Link
                 key={item.href}
@@ -73,6 +106,25 @@ function PortalShell({ children }: { children: React.ReactNode }) {
               </Link>
             );
           })}
+
+          {/* Admin section */}
+          {isAdmin && (
+            <>
+              <div className="my-3 border-t border-zinc-200 dark:border-zinc-800" />
+              <Link
+                href="/admin"
+                onClick={() => setSidebarOpen(false)}
+                className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  pathname.startsWith('/admin')
+                    ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400'
+                    : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200'
+                }`}
+              >
+                <Shield className="h-4 w-4" />
+                Administration
+              </Link>
+            </>
+          )}
         </nav>
 
         <div className="border-t border-zinc-200 p-4 dark:border-zinc-800">
@@ -98,6 +150,20 @@ function PortalShell({ children }: { children: React.ReactNode }) {
             {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
           <div className="flex-1" />
+
+          {/* Notification bell */}
+          <Link
+            href="/dashboard"
+            className="relative rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            aria-label="Notifications"
+          >
+            <Bell className="h-5 w-5" />
+            {unreadCount > 0 && (
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+                {unreadCount > 99 ? '99+' : unreadCount}
+              </span>
+            )}
+          </Link>
         </header>
 
         {/* Page content */}

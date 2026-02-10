@@ -1,0 +1,52 @@
+import { apiFetch } from './api';
+import type {
+  ApiResponse,
+  PaginatedResponse,
+  PaginationParams,
+  Donation,
+  DonationStats,
+  CreateDonationData,
+} from '@/types';
+
+export const donationsApi = {
+  create(data: CreateDonationData) {
+    return apiFetch<ApiResponse<Donation>>('/api/v1/donations', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  getMyDonations(params?: PaginationParams) {
+    const searchParams = new URLSearchParams();
+    if (params?.page) searchParams.set('page', String(params.page));
+    if (params?.limit) searchParams.set('limit', String(params.limit));
+    const qs = searchParams.toString();
+    return apiFetch<PaginatedResponse<Donation>>(`/api/v1/donations/me${qs ? `?${qs}` : ''}`);
+  },
+
+  // Admin
+  getAll(params?: PaginationParams & { status?: string }) {
+    const searchParams = new URLSearchParams();
+    if (params?.page) searchParams.set('page', String(params.page));
+    if (params?.limit) searchParams.set('limit', String(params.limit));
+    if (params?.status) searchParams.set('status', params.status);
+    const qs = searchParams.toString();
+    return apiFetch<PaginatedResponse<Donation>>(`/api/v1/admin/donations${qs ? `?${qs}` : ''}`);
+  },
+
+  getStats() {
+    return apiFetch<ApiResponse<DonationStats>>('/api/v1/admin/donations/stats');
+  },
+
+  validate(id: string) {
+    return apiFetch<ApiResponse<Donation>>(`/api/v1/admin/donations/${id}/validate`, {
+      method: 'POST',
+    });
+  },
+
+  reject(id: string) {
+    return apiFetch<ApiResponse<Donation>>(`/api/v1/admin/donations/${id}/reject`, {
+      method: 'POST',
+    });
+  },
+};
