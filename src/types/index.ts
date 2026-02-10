@@ -528,3 +528,343 @@ export interface AnnualReceiptResponse {
   receiptNumber: string;
   filename: string;
 }
+
+// ========== Module Maraude ==========
+
+export type MaraudeStatus = 'PLANNED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED';
+export type EncounterType = 'FIRST_CONTACT' | 'FOLLOW_UP' | 'EMERGENCY' | 'CHECK_IN' | 'REFERRAL_ONLY';
+export type UrgencyLevel = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+export type ReferralStatus = 'PROPOSED' | 'ACCEPTED' | 'COMPLETED' | 'REFUSED' | 'NO_SHOW' | 'EXPIRED';
+export type BeneficiaryGender = 'MALE' | 'FEMALE' | 'OTHER' | 'UNKNOWN';
+export type HousingStatus = 'STREET' | 'SHELTER' | 'SQUAT' | 'TEMPORARY' | 'HOSTED' | 'HOUSED' | 'UNKNOWN';
+export type AdministrativeStatus = 'REGULAR' | 'ASYLUM_SEEKER' | 'REFUGEE' | 'UNDOCUMENTED' | 'UNKNOWN' | 'OTHER';
+export type GdprConsentStatus = 'GIVEN' | 'ORAL' | 'VITAL' | 'REFUSED' | 'NOT_ASKED' | 'WITHDRAWN';
+
+export interface MaraudeZone {
+  id: string;
+  name: string;
+  description?: string;
+  color?: string;
+  centerLat?: number;
+  centerLng?: number;
+  radiusKm?: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Maraude {
+  id: string;
+  zoneId?: string;
+  coordinatorId: string;
+  title?: string;
+  description?: string;
+  status: MaraudeStatus;
+  plannedStartAt: string;
+  plannedEndAt?: string;
+  actualStartAt?: string;
+  actualEndAt?: string;
+  startLocationName?: string;
+  startLocationLat?: number;
+  startLocationLng?: number;
+  weatherConditions?: string;
+  temperatureCelsius?: number;
+  generalObservations?: string;
+  vehicleInfo?: string;
+  suppliesDistributed?: Record<string, number>;
+  createdAt: string;
+  updatedAt: string;
+  zone?: MaraudeZone;
+  coordinator?: { id: string; firstName: string; lastName: string };
+  participants?: MaraudeParticipant[];
+  encounters?: Encounter[];
+  report?: MaraudeReport;
+  incidents?: MaraudeIncident[];
+  _count?: { participants: number; encounters: number };
+}
+
+export interface MaraudeParticipant {
+  id: string;
+  maraudeId: string;
+  userId?: string;
+  volunteerId?: string;
+  role: string;
+  joinedAt: string;
+  leftAt?: string;
+  user?: { id: string; firstName: string; lastName: string };
+  volunteer?: { id: string; firstName: string; lastName: string };
+}
+
+export interface Beneficiary {
+  id: string;
+  nickname: string;
+  firstName?: string;
+  lastName?: string;
+  estimatedAge?: number;
+  dateOfBirth?: string;
+  gender: BeneficiaryGender;
+  nationality?: string;
+  spokenLanguages: string[];
+  housingStatus: HousingStatus;
+  administrativeStatus: AdministrativeStatus;
+  hasEmployment?: boolean;
+  healthNotes?: string;
+  hasPets: boolean;
+  petDetails?: string;
+  usualLocation?: string;
+  usualLocationLat?: number;
+  usualLocationLng?: number;
+  photoUrl?: string;
+  photoConsentGiven: boolean;
+  gdprConsentStatus: GdprConsentStatus;
+  gdprConsentDate?: string;
+  notes?: string;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+  deletedAt?: string;
+  encounters?: Encounter[];
+  referrals?: Referral[];
+  _count?: { encounters: number };
+}
+
+export interface NeedCategory {
+  id: string;
+  code: string;
+  name: string;
+  description?: string;
+  icon?: string;
+  color?: string;
+  parentId?: string;
+  displayOrder: number;
+  isActive: boolean;
+  children?: NeedCategory[];
+}
+
+export interface ActionCategory {
+  id: string;
+  code: string;
+  name: string;
+  description?: string;
+  icon?: string;
+  color?: string;
+  displayOrder: number;
+  isActive: boolean;
+}
+
+export interface Encounter {
+  id: string;
+  maraudeId: string;
+  beneficiaryId?: string;
+  recordedById: string;
+  type: EncounterType;
+  urgencyLevel: UrgencyLevel;
+  locationName?: string;
+  locationLat?: number;
+  locationLng?: number;
+  physicalState?: string;
+  mentalState?: string;
+  socialContext?: string;
+  notes?: string;
+  privateNotes?: string;
+  itemsDistributed?: Record<string, number>;
+  durationMinutes?: number;
+  createdAt: string;
+  updatedAt: string;
+  maraude?: { id: string; title?: string; plannedStartAt: string };
+  beneficiary?: { id: string; nickname: string; usualLocation?: string };
+  recordedBy?: { id: string; firstName: string; lastName: string };
+  needs?: EncounterNeed[];
+  actions?: EncounterAction[];
+  referrals?: Referral[];
+}
+
+export interface EncounterNeed {
+  id: string;
+  encounterId: string;
+  needCategoryId: string;
+  priority: number;
+  isAddressed: boolean;
+  notes?: string;
+  needCategory?: NeedCategory;
+}
+
+export interface EncounterAction {
+  id: string;
+  encounterId: string;
+  actionCategoryId: string;
+  quantity: number;
+  notes?: string;
+  actionCategory?: ActionCategory;
+}
+
+export interface ReferralStructure {
+  id: string;
+  name: string;
+  type: string;
+  address?: string;
+  phone?: string;
+  email?: string;
+  website?: string;
+  openingHours?: string;
+  capacity?: number;
+  admissionCriteria?: string;
+  latitude?: number;
+  longitude?: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Referral {
+  id: string;
+  encounterId?: string;
+  beneficiaryId: string;
+  structureId?: string;
+  referredById: string;
+  structureName?: string;
+  reason?: string;
+  status: ReferralStatus;
+  notes?: string;
+  appointmentDate?: string;
+  completedAt?: string;
+  followUpDate?: string;
+  followUpNotes?: string;
+  createdAt: string;
+  updatedAt: string;
+  beneficiary?: { id: string; nickname: string };
+  structure?: { id: string; name: string; type: string };
+  referredBy?: { id: string; firstName: string; lastName: string };
+}
+
+export interface MaraudeReport {
+  id: string;
+  maraudeId: string;
+  authorId: string;
+  totalEncounters: number;
+  newBeneficiaries: number;
+  followUpEncounters: number;
+  emergencyEncounters: number;
+  referralsMade: number;
+  mealsDistributed: number;
+  blanketsDistributed: number;
+  hygieneKitsDistributed: number;
+  otherDistributions?: Record<string, number>;
+  summary?: string;
+  pointsOfAttention?: string;
+  positiveHighlights?: string;
+  suggestions?: string;
+  submittedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MaraudeIncident {
+  id: string;
+  maraudeId: string;
+  reportedById: string;
+  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  title: string;
+  description?: string;
+  locationName?: string;
+  occurredAt: string;
+  resolvedAt?: string;
+  resolution?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MaraudeDashboardStats {
+  totalMaraudes: number;
+  activeMaraudes: number;
+  maraudesThisMonth: number;
+  totalEncounters: number;
+  encountersThisMonth: number;
+  totalBeneficiaries: number;
+  newBeneficiariesThisMonth: number;
+  pendingReferrals: number;
+  criticalEncounters: number;
+}
+
+export interface CreateMaraudeData {
+  zoneId?: string;
+  title?: string;
+  description?: string;
+  plannedStartAt: string;
+  plannedEndAt?: string;
+  startLocationName?: string;
+  startLocationLat?: number;
+  startLocationLng?: number;
+  vehicleInfo?: string;
+}
+
+export interface CreateBeneficiaryData {
+  nickname: string;
+  firstName?: string;
+  lastName?: string;
+  estimatedAge?: number;
+  gender?: BeneficiaryGender;
+  housingStatus?: HousingStatus;
+  administrativeStatus?: AdministrativeStatus;
+  usualLocation?: string;
+  usualLocationLat?: number;
+  usualLocationLng?: number;
+  gdprConsentStatus?: GdprConsentStatus;
+  notes?: string;
+  tags?: string[];
+  spokenLanguages?: string[];
+}
+
+export interface CreateEncounterData {
+  maraudeId: string;
+  beneficiaryId?: string;
+  type?: EncounterType;
+  urgencyLevel?: UrgencyLevel;
+  locationName?: string;
+  locationLat?: number;
+  locationLng?: number;
+  physicalState?: string;
+  mentalState?: string;
+  socialContext?: string;
+  notes?: string;
+  privateNotes?: string;
+  itemsDistributed?: Record<string, number>;
+  durationMinutes?: number;
+  needCategoryIds?: string[];
+  actionCategoryIds?: string[];
+}
+
+export interface QuickEncounterData {
+  maraudeId: string;
+  beneficiaryId?: string;
+  newBeneficiaryNickname?: string;
+  locationLat?: number;
+  locationLng?: number;
+  needCodes?: string[];
+  actionCodes?: string[];
+  notes?: string;
+}
+
+export interface CreateReferralData {
+  encounterId?: string;
+  beneficiaryId: string;
+  structureId?: string;
+  structureName?: string;
+  reason?: string;
+  notes?: string;
+  appointmentDate?: string;
+}
+
+export interface CreateReferralStructureData {
+  name: string;
+  type: string;
+  address?: string;
+  phone?: string;
+  email?: string;
+  website?: string;
+  openingHours?: string;
+  capacity?: number;
+  admissionCriteria?: string;
+  latitude?: number;
+  longitude?: number;
+}
