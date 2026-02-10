@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
-import { Heart, Plus } from 'lucide-react';
+import { Heart, Plus, RefreshCw } from 'lucide-react';
 import { donationsApi } from '@/services/donations';
 import { DataTable, type Column } from '@/components/ui/DataTable';
 import { StatusBadge } from '@/components/ui/StatusBadge';
@@ -66,20 +66,29 @@ export default function DonationsPage() {
 
   return (
     <div>
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Mes Dons</h1>
           <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
             Historique de vos dons a l&apos;association.
           </p>
         </div>
-        <Link
-          href="/donations/new"
-          className="flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
-        >
-          <Plus className="h-4 w-4" />
-          Nouveau don
-        </Link>
+        <div className="flex gap-2">
+          <Link
+            href="/donations/recurrents"
+            className="flex items-center gap-2 rounded-lg border border-rose-300 px-4 py-2 text-sm font-medium text-rose-700 transition-colors hover:bg-rose-50 dark:border-rose-700 dark:text-rose-400 dark:hover:bg-rose-950/20"
+          >
+            <RefreshCw className="h-4 w-4" />
+            Mes dons recurrents
+          </Link>
+          <Link
+            href="/donations/new"
+            className="flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
+          >
+            <Plus className="h-4 w-4" />
+            Nouveau don
+          </Link>
+        </div>
       </div>
 
       {!loading && donations.length === 0 ? (

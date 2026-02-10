@@ -165,6 +165,20 @@ export interface Project {
   createdAt: string;
 }
 
+export interface CreateProjectData {
+  name: string;
+  description?: string;
+  targetAmount?: number;
+  startDate?: string;
+  endDate?: string;
+  imageUrl?: string;
+  isFeatured?: boolean;
+}
+
+export type UpdateProjectData = Partial<CreateProjectData> & {
+  status?: string;
+};
+
 // ── Event ──
 
 export interface Event {
@@ -261,6 +275,16 @@ export interface Category {
   _count?: { articles: number };
 }
 
+export interface CreateCategoryData {
+  name: string;
+  slug?: string;
+  description?: string;
+  color?: string;
+  displayOrder?: number;
+}
+
+export type UpdateCategoryData = Partial<CreateCategoryData>;
+
 export interface CreateArticleData {
   title: string;
   content: string;
@@ -306,4 +330,91 @@ export interface SearchIndexResult {
 
 export interface SearchResponse {
   results: SearchIndexResult[];
+}
+
+// ── Recurrence ──
+
+export type RecurrenceFrequency = 'MONTHLY' | 'QUARTERLY' | 'YEARLY';
+export type RecurrenceStatus = 'ACTIVE' | 'PAUSED' | 'CANCELED' | 'EXPIRED';
+
+export interface DonationRecurrence {
+  id: string;
+  userId: string;
+  projectId?: string;
+  amount: number;
+  frequency: RecurrenceFrequency;
+  status: RecurrenceStatus;
+  stripeSubscriptionId?: string;
+  nextPaymentDate?: string;
+  lastPaymentDate?: string;
+  paymentCount: number;
+  createdAt: string;
+  updatedAt: string;
+  canceledAt?: string;
+  project?: Project;
+}
+
+export interface CreateRecurrenceData {
+  amount: number;
+  frequency: RecurrenceFrequency;
+  projectId?: string;
+  paymentMethodId: string;
+}
+
+export interface CreateRecurrenceResponse {
+  recurrence: DonationRecurrence;
+  clientSecret: string;
+}
+
+export interface RecurrenceStats {
+  totalActive: number;
+  monthlyRevenue: number;
+  averageAmount: number;
+}
+
+// ── Volunteer ──
+
+export type VolunteerStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'PAUSED';
+
+export interface Volunteer {
+  id: string;
+  userId?: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone?: string;
+  skills: string[];
+  availabilities: Record<string, string[]>;
+  motivation?: string;
+  status: VolunteerStatus;
+  coordinatorNotes?: string;
+  approvedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+  user?: User;
+  assignments?: VolunteerAssignment[];
+}
+
+export interface VolunteerAssignment {
+  id: string;
+  volunteerId: string;
+  eventId?: string;
+  projectId?: string;
+  role?: string;
+  notes?: string;
+  status: string;
+  assignedAt: string;
+  completedAt?: string;
+  event?: Event;
+  project?: Project;
+}
+
+export interface CreateVolunteerData {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone?: string;
+  skills: string[];
+  availabilities: Record<string, string[]>;
+  motivation?: string;
 }

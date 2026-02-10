@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Heart, Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import { Heart, Loader2, RefreshCw, ArrowRight } from 'lucide-react';
 import { donationsApi } from '@/services/donations';
 import { StripeProvider } from '@/components/providers/StripeProvider';
 import { StripePaymentForm } from '@/components/donations/StripePaymentForm';
@@ -112,6 +113,29 @@ export default function FaireUnDonPage() {
             Soutenez nos actions. Chaque don compte et vous ouvre droit a une
             reduction d&apos;impot de 66%.
           </p>
+        </div>
+      </section>
+
+      {/* Recurring donation banner */}
+      <section className="bg-white pt-8 dark:bg-zinc-950">
+        <div className="mx-auto max-w-2xl px-4">
+          <Link
+            href="/faire-un-don/recurrent"
+            className="group flex items-center gap-4 rounded-xl border border-rose-200 bg-rose-50 p-4 transition-colors hover:border-rose-300 hover:bg-rose-100 dark:border-rose-800 dark:bg-rose-950/20 dark:hover:border-rose-700 dark:hover:bg-rose-950/30"
+          >
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-rose-100 dark:bg-rose-900/50">
+              <RefreshCw className="h-5 w-5 text-rose-600 dark:text-rose-400" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-rose-800 dark:text-rose-300">
+                Soutenez-nous chaque mois
+              </p>
+              <p className="mt-0.5 text-xs text-rose-600 dark:text-rose-400">
+                Un don recurrent nous aide a planifier nos actions sur le long terme.
+              </p>
+            </div>
+            <ArrowRight className="h-5 w-5 shrink-0 text-rose-400 transition-transform group-hover:translate-x-1 dark:text-rose-500" />
+          </Link>
         </div>
       </section>
 

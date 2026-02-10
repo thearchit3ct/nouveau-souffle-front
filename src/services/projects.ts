@@ -4,6 +4,8 @@ import type {
   PaginatedResponse,
   PaginationParams,
   Project,
+  CreateProjectData,
+  UpdateProjectData,
 } from '@/types';
 
 export const projectsApi = {
@@ -21,5 +23,26 @@ export const projectsApi = {
 
   getBySlug(slug: string) {
     return apiFetch<ApiResponse<Project>>(`/api/v1/projects/${slug}`);
+  },
+
+  // Admin endpoints
+  create(data: CreateProjectData) {
+    return apiFetch<ApiResponse<Project>>('/api/v1/projects', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  update(id: string, data: UpdateProjectData) {
+    return apiFetch<ApiResponse<Project>>(`/api/v1/projects/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  },
+
+  archive(id: string) {
+    return apiFetch<ApiResponse<Project>>(`/api/v1/projects/${id}`, {
+      method: 'DELETE',
+    });
   },
 };
