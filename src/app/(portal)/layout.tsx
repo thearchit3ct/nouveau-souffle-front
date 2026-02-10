@@ -13,6 +13,7 @@ import {
   CreditCard,
   Calendar,
   Shield,
+  FileText,
   Bell,
   LogOut,
   Menu,
@@ -115,13 +116,25 @@ function PortalShell({ children }: { children: React.ReactNode }) {
                 href="/admin"
                 onClick={() => setSidebarOpen(false)}
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                  pathname.startsWith('/admin')
+                  pathname === '/admin'
                     ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400'
                     : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200'
                 }`}
               >
                 <Shield className="h-4 w-4" />
                 Administration
+              </Link>
+              <Link
+                href="/admin/articles"
+                onClick={() => setSidebarOpen(false)}
+                className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  pathname.startsWith('/admin/articles')
+                    ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400'
+                    : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200'
+                }`}
+              >
+                <FileText className="h-4 w-4" />
+                Articles
               </Link>
             </>
           )}
