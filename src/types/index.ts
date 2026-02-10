@@ -93,6 +93,32 @@ export interface CreateDonationData {
   anonymous?: boolean;
 }
 
+export interface CreateDonationIntentData {
+  amount: number;
+  donorEmail: string;
+  donorFirstName: string;
+  donorLastName: string;
+  projectId?: string;
+  isAnonymous?: boolean;
+  receiptRequested?: boolean;
+  donorAddress?: string;
+  donorPostalCode?: string;
+  donorCity?: string;
+}
+
+export interface PaymentIntentResponse {
+  donationId: string;
+  clientSecret: string;
+  amount: number;
+  currency: string;
+}
+
+export interface ReceiptResponse {
+  receiptUrl: string;
+  receiptNumber: string;
+  filename: string;
+}
+
 export interface DonationStats {
   totalAmount: number;
   totalCount: number;

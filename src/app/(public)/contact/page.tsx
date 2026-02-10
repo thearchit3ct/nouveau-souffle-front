@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Mail, MapPin, Send, CheckCircle } from 'lucide-react';
+import { Mail, MapPin, Send, CheckCircle, Loader2 } from 'lucide-react';
+import { contactApi } from '@/services/contact';
 
 interface FormData {
   name: string;
@@ -26,6 +27,8 @@ export default function ContactPage() {
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState('');
 
   function validate(): boolean {
     const newErrors: FormErrors = {};
@@ -49,10 +52,20 @@ export default function ContactPage() {
     return Object.keys(newErrors).length === 0;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (validate()) {
+    if (!validate()) return;
+
+    setLoading(true);
+    setApiError('');
+
+    try {
+      await contactApi.submit(formData);
       setSubmitted(true);
+    } catch {
+      setApiError('Une erreur est survenue. Veuillez reessayer.');
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -217,12 +230,23 @@ export default function ContactPage() {
                   )}
                 </div>
 
+                {apiError && (
+                  <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-950/20 dark:text-red-400">
+                    {apiError}
+                  </div>
+                )}
+
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:ring-offset-2"
+                  disabled={loading}
+                  className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <Send className="h-4 w-4" />
-                  Envoyer
+                  {loading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Send className="h-4 w-4" />
+                  )}
+                  {loading ? 'Envoi en cours...' : 'Envoyer'}
                 </button>
               </form>
             </div>

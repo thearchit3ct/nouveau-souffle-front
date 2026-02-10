@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Heart } from 'lucide-react';
 
 const navLinks = [
   { name: 'Accueil', href: '/' },
@@ -11,6 +11,7 @@ const navLinks = [
   { name: 'Blog', href: '/blog' },
   { name: 'Projets', href: '/projets' },
   { name: 'Evenements', href: '/events' },
+  { name: 'Contact', href: '/contact' },
 ];
 
 export function PublicHeader() {
@@ -50,8 +51,15 @@ export function PublicHeader() {
           })}
         </nav>
 
-        {/* Auth buttons (desktop) */}
+        {/* Auth buttons + CTA (desktop) */}
         <div className="hidden items-center gap-3 md:flex">
+          <Link
+            href="/faire-un-don"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-rose-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:ring-offset-2"
+          >
+            <Heart className="h-3.5 w-3.5" />
+            Faire un don
+          </Link>
           <Link
             href="/auth/login"
             className="rounded-lg border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"

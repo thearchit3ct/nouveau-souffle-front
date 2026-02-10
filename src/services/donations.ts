@@ -6,6 +6,9 @@ import type {
   Donation,
   DonationStats,
   CreateDonationData,
+  CreateDonationIntentData,
+  PaymentIntentResponse,
+  ReceiptResponse,
 } from '@/types';
 
 export const donationsApi = {
@@ -48,5 +51,16 @@ export const donationsApi = {
     return apiFetch<ApiResponse<Donation>>(`/api/v1/admin/donations/${id}/reject`, {
       method: 'POST',
     });
+  },
+
+  createPaymentIntent(data: CreateDonationIntentData) {
+    return apiFetch<ApiResponse<PaymentIntentResponse>>('/api/v1/donations/intent', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  getReceipt(donationId: string) {
+    return apiFetch<ApiResponse<ReceiptResponse>>(`/api/v1/donations/${donationId}/receipt`);
   },
 };
