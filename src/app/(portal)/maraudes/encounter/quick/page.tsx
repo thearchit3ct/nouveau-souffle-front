@@ -52,13 +52,13 @@ export default function QuickEncounterPage() {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-4">
+    <div className="max-w-lg mx-auto px-4 py-4">
       <h1 className="text-xl font-bold mb-4">Quick Log</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
         <div>
           <label className="block text-sm font-medium mb-1">Beneficiaire</label>
           <select value={form.beneficiaryId} onChange={e => setForm({ ...form, beneficiaryId: e.target.value })}
-            className="w-full border rounded px-3 py-2">
+            className="w-full border rounded px-3 py-3 min-h-[44px] text-base">
             <option value="">-- Nouveau / Anonyme --</option>
             {beneficiaries.map(b => <option key={b.id} value={b.id}>{b.nickname}</option>)}
           </select>
@@ -68,7 +68,7 @@ export default function QuickEncounterPage() {
             <label className="block text-sm font-medium mb-1">Surnom (nouveau)</label>
             <input type="text" value={form.newBeneficiaryNickname}
               onChange={e => setForm({ ...form, newBeneficiaryNickname: e.target.value })}
-              className="w-full border rounded px-3 py-2" placeholder="Laisser vide = anonyme" />
+              className="w-full border rounded px-3 py-3 min-h-[44px] text-base" placeholder="Laisser vide = anonyme" />
           </div>
         )}
 
@@ -78,7 +78,7 @@ export default function QuickEncounterPage() {
             {needCats.map(c => (
               <button key={c.code} type="button"
                 onClick={() => setForm({ ...form, needCodes: toggleCode(form.needCodes, c.code) })}
-                className={`px-3 py-1.5 rounded text-sm ${form.needCodes.includes(c.code) ? 'bg-blue-600 text-white' : 'bg-gray-100 hover:bg-gray-200'}`}>
+                className={`px-3 py-2.5 rounded text-sm min-h-[44px] ${form.needCodes.includes(c.code) ? 'bg-blue-600 text-white' : 'bg-gray-100 active:bg-gray-300'}`}>
                 {c.icon && <span className="mr-1">{c.icon}</span>}{c.name}
               </button>
             ))}
@@ -91,7 +91,7 @@ export default function QuickEncounterPage() {
             {actionCats.map(c => (
               <button key={c.code} type="button"
                 onClick={() => setForm({ ...form, actionCodes: toggleCode(form.actionCodes, c.code) })}
-                className={`px-3 py-1.5 rounded text-sm ${form.actionCodes.includes(c.code) ? 'bg-green-600 text-white' : 'bg-gray-100 hover:bg-gray-200'}`}>
+                className={`px-3 py-2.5 rounded text-sm min-h-[44px] ${form.actionCodes.includes(c.code) ? 'bg-green-600 text-white' : 'bg-gray-100 active:bg-gray-300'}`}>
                 {c.icon && <span className="mr-1">{c.icon}</span>}{c.name}
               </button>
             ))}
@@ -101,11 +101,11 @@ export default function QuickEncounterPage() {
         <div>
           <label className="block text-sm font-medium mb-1">Notes</label>
           <textarea value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })}
-            className="w-full border rounded px-3 py-2" rows={2} />
+            className="w-full border rounded px-3 py-3 text-base" rows={2} />
         </div>
 
         <button type="submit" disabled={loading}
-          className="w-full bg-green-600 text-white py-3 rounded text-lg font-semibold hover:bg-green-700 disabled:opacity-50">
+          className="w-full bg-green-600 text-white py-4 rounded-lg text-lg font-semibold active:bg-green-800 disabled:opacity-50 min-h-[52px]">
           {loading ? 'Enregistrement...' : 'Enregistrer'}
         </button>
       </form>

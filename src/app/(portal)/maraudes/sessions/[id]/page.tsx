@@ -5,6 +5,10 @@ import Link from 'next/link';
 import { maraudesApi } from '@/services/maraudes';
 import type { Maraude } from '@/types';
 
+const statusLabels: Record<string, string> = {
+  PLANNED: 'Planifiee', IN_PROGRESS: 'En cours', COMPLETED: 'Terminee', CANCELED: 'Annulee',
+};
+
 export default function MaraudeDetailPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -31,24 +35,24 @@ export default function MaraudeDetailPage() {
   if (!maraude) return <div className="p-6">Maraude non trouvee</div>;
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="flex justify-between items-start mb-6">
+    <div className="max-w-4xl mx-auto px-4 py-4 sm:px-6 sm:py-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-6">
         <div>
-          <h1 className="text-2xl font-bold">{maraude.title || 'Maraude'}</h1>
-          <p className="text-gray-600">{new Date(maraude.plannedStartAt).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+          <h1 className="text-xl sm:text-2xl font-bold">{maraude.title || 'Maraude'}</h1>
+          <p className="text-gray-600 text-sm sm:text-base">{new Date(maraude.plannedStartAt).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
           {maraude.zone && <p className="text-sm text-gray-500">Zone: {maraude.zone.name}</p>}
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           {maraude.status === 'PLANNED' && (
             <>
-              <button onClick={() => handleAction('start')} className="bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-700">Demarrer</button>
-              <button onClick={() => handleAction('join')} className="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">Rejoindre</button>
+              <button onClick={() => handleAction('start')} className="bg-green-600 text-white px-4 py-3 rounded text-sm hover:bg-green-700 min-h-[44px] flex-1 sm:flex-none">Demarrer</button>
+              <button onClick={() => handleAction('join')} className="bg-blue-600 text-white px-4 py-3 rounded text-sm hover:bg-blue-700 min-h-[44px] flex-1 sm:flex-none">Rejoindre</button>
             </>
           )}
           {maraude.status === 'IN_PROGRESS' && (
             <>
-              <Link href={`/maraudes/encounter/quick?maraudeId=${id}`} className="bg-orange-500 text-white px-4 py-2 rounded text-sm hover:bg-orange-600">Quick Log</Link>
-              <button onClick={() => handleAction('end')} className="bg-red-600 text-white px-4 py-2 rounded text-sm hover:bg-red-700">Terminer</button>
+              <Link href={`/maraudes/encounter/quick?maraudeId=${id}`} className="bg-orange-500 text-white px-4 py-3 rounded text-sm hover:bg-orange-600 min-h-[44px] flex-1 sm:flex-none text-center flex items-center justify-center">Quick Log</Link>
+              <button onClick={() => handleAction('end')} className="bg-red-600 text-white px-4 py-3 rounded text-sm hover:bg-red-700 min-h-[44px] flex-1 sm:flex-none">Terminer</button>
             </>
           )}
         </div>
@@ -56,18 +60,18 @@ export default function MaraudeDetailPage() {
 
       {maraude.description && <p className="mb-4 text-gray-700">{maraude.description}</p>}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white p-4 rounded-lg shadow">
-          <p className="text-sm text-gray-500">Statut</p>
-          <p className="text-lg font-semibold">{maraude.status}</p>
+      <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6">
+        <div className="bg-white p-3 sm:p-4 rounded-lg shadow">
+          <p className="text-xs sm:text-sm text-gray-500">Statut</p>
+          <p className="text-sm sm:text-lg font-semibold">{statusLabels[maraude.status] || maraude.status}</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow">
-          <p className="text-sm text-gray-500">Equipe</p>
-          <p className="text-lg font-semibold">{maraude.participants?.length || 0} participants</p>
+        <div className="bg-white p-3 sm:p-4 rounded-lg shadow">
+          <p className="text-xs sm:text-sm text-gray-500">Equipe</p>
+          <p className="text-sm sm:text-lg font-semibold">{maraude.participants?.length || 0}</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow">
-          <p className="text-sm text-gray-500">Rencontres</p>
-          <p className="text-lg font-semibold">{maraude.encounters?.length || 0}</p>
+        <div className="bg-white p-3 sm:p-4 rounded-lg shadow">
+          <p className="text-xs sm:text-sm text-gray-500">Rencontres</p>
+          <p className="text-sm sm:text-lg font-semibold">{maraude.encounters?.length || 0}</p>
         </div>
       </div>
 
@@ -113,7 +117,7 @@ export default function MaraudeDetailPage() {
       {maraude.report && (
         <div className="bg-white rounded-lg shadow p-4">
           <h2 className="text-lg font-semibold mb-3">Compte-rendu</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+          <div className="grid grid-cols-2 gap-3 text-sm">
             <div><span className="text-gray-500">Rencontres:</span> {maraude.report.totalEncounters}</div>
             <div><span className="text-gray-500">Nouveaux:</span> {maraude.report.newBeneficiaries}</div>
             <div><span className="text-gray-500">Repas:</span> {maraude.report.mealsDistributed}</div>
